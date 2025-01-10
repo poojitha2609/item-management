@@ -11,8 +11,7 @@ import lombok.Data;
 @Data
 public class Item {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "itemno")
+    @Column(name = "itemno" , nullable = false , unique = true )
     @Min(value = 1, message = "itemno must be greater than or equal to 1")
     private Long itemNo;
 
@@ -33,4 +32,9 @@ public class Item {
     @NotNull(message = "Item quantity cannot be null")
     @Min(value = 1 , message = "quantity should be grater than one")
     private int stockQty;
+
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "itemnId")
+//    @Min(value = 1, message = "itemno must be greater than or equal to 1")
+//    private Long itemId;
 }

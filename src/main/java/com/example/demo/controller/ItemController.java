@@ -2,10 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Item;
 import com.example.demo.service.ItemService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 
 @RestController
 @RequestMapping
@@ -21,14 +21,10 @@ public class ItemController {
         return itemService.getItem();
     }
 
-    @GetMapping("/items/{id}")
-    public String getItemsByItemNum(@PathVariable("id") Long id) {
-        try {
-            Item item = itemService.getItemByItemNum(id);
-            return item.toString();
-        } catch (NoSuchElementException e) {
-            return "Item with ID " + id + " not found";
-        }
+    @GetMapping("/items/{itemNo}")
+    public ResponseEntity<Item> getItem(@PathVariable Long itemNo) {
+        Item item = itemService.getItemByItemNum(itemNo);
+        return ResponseEntity.ok(item);
     }
 
     @PostMapping("/items")
@@ -36,13 +32,27 @@ public class ItemController {
         return itemService.saveItem(item);
     }
 
-    @PutMapping("/items/{itemno}")
-    public Item updateItem(@PathVariable Long itemno, @RequestBody Item updatedItem) {
-        return itemService.updateItem(itemno, updatedItem);
+    @PutMapping("/items/{itemNo}")
+    public ResponseEntity<Item> updateItem(@PathVariable Long itemNo, @RequestBody Item updatedItem) {
+        return ResponseEntity.ok(itemService.updateItem(itemNo, updatedItem));
     }
 
-    @DeleteMapping("/items/{id}")
-    public void deleteItem(@PathVariable Long id) {
-        itemService.deleteItem(id);
+    @DeleteMapping("/items/{itemNo}")
+    public ResponseEntity<String> deleteItem(@PathVariable Long itemNo) {
+        String deleteItem = itemService.deleteItem(itemNo);
+        return ResponseEntity.ok(deleteItem);
     }
+
+    @PutMapping("/items/{itemNo}/updateStock")
+    public ResponseEntity<String> updateStock(@PathVariable Long itemNo, @RequestBody Map<String, Integer> stockUpdate) {
+        Integer newStockQty = stockUpdate.get("newStockQty");
+        if (newStockQty == null || newStockQty < 0) {
+            return ResponseEntity.badRequest().body("Invalid stock quantity.");
+        }
+        itemService.updateStock(itemNo, newStockQty);
+        return ResponseEntity.ok("Stock updated successfully.");
+    }
+
+
+
 }
