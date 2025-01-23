@@ -46,13 +46,8 @@ public class ItemController {
     @PutMapping("/items/{itemNo}/updateStock")
     public ResponseEntity<String> updateStock(@PathVariable Long itemNo, @RequestBody Map<String, Integer> stockUpdate) {
         Integer newStockQty = stockUpdate.get("newStockQty");
-        if (newStockQty == null || newStockQty < 0) {
-            return ResponseEntity.badRequest().body("Invalid stock quantity.");
-        }
         itemService.updateStock(itemNo, newStockQty);
         return ResponseEntity.ok("Stock updated successfully.");
     }
-
-
 
 }

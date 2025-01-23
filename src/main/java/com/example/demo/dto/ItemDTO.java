@@ -13,6 +13,6 @@ public class ItemDTO {
     private Long itemNo;
     private String description;
     private float price;
-    private int stockQty;
+    private Integer stockQty;
 
 }

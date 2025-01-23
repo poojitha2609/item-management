@@ -14,6 +14,6 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ResponseEntity<>("Item cannot be deleted",null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(),null, HttpStatus.BAD_REQUEST);
     }
 }

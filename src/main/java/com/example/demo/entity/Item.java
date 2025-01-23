@@ -31,10 +31,6 @@ public class Item {
     @Column(name = "stockqty")
     @NotNull(message = "Item quantity cannot be null")
     @Min(value = 1 , message = "quantity should be grater than one")
-    private int stockQty;
+    private Integer stockQty;
 
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "itemnId")
-//    @Min(value = 1, message = "itemno must be greater than or equal to 1")
-//    private Long itemId;
 }

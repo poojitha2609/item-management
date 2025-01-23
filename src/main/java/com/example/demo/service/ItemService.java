@@ -8,7 +8,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -30,8 +29,12 @@ public class ItemService {
     }
 
     public Item saveItem(Item item) {
+        if (itemRepository.existsByItemNo(item.getItemNo())) {
+            throw new IllegalArgumentException("Item with itemNo " + item.getItemNo() + " already exists.");
+        }
         return itemRepository.save(item);
     }
+
 
     public Item updateItem(Long itemNo, Item updatedItem) {
         itemRepository.findById(itemNo).orElseThrow(() -> new EntityNotFoundException("Item with itemNo " + itemNo + " not found"));
@@ -50,7 +53,7 @@ public class ItemService {
                 .block());
 
         if (Boolean.TRUE.equals(isItemInOrder)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Item cannot be deleted");
         }
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new EntityNotFoundException("Item with ID " + itemNo + " not found."));
@@ -58,10 +61,10 @@ public class ItemService {
         return String.format("Item with ID %d has been successfully deleted.", itemNo);
     }
 
-    public void updateStock(Long itemNo, int newStockQty) {
+    public void updateStock(Long itemNo, Integer newStockQty) {
         Item item = itemRepository.findById(itemNo).orElseThrow(() -> new EntityNotFoundException("Item with itemNo " + itemNo + " not found"));
-        if (newStockQty < 0) {
-            throw new IllegalArgumentException("Stock quantity cannot be negative");
+        if (newStockQty == null || newStockQty < 0) {
+            throw new IllegalArgumentException("Stock quantity cannot be negative and cannot be zero");
         }
         item.setStockQty(newStockQty);
         itemRepository.save(item);
