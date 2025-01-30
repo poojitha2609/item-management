@@ -30,14 +30,14 @@ public class ItemService {
 
     public Item saveItem(Item item) {
         if (itemRepository.existsByItemNo(item.getItemNo())) {
-            throw new IllegalArgumentException("Item with itemNo " + item.getItemNo() + " already exists.");
+            throw new IllegalArgumentException(String.format("Item with itemNo %d already exists.", item.getItemNo()));
         }
         return itemRepository.save(item);
     }
 
 
     public Item updateItem(Long itemNo, Item updatedItem) {
-        itemRepository.findById(itemNo).orElseThrow(() -> new EntityNotFoundException("Item with itemNo " + itemNo + " not found"));
+        itemRepository.findById(itemNo).orElseThrow(() -> new EntityNotFoundException(String.format("Item with %d not found", itemNo)));
         updatedItem.setItemNo(itemNo);
         return itemRepository.save(updatedItem);
     }
@@ -56,13 +56,13 @@ public class ItemService {
             throw new IllegalArgumentException("Item cannot be deleted");
         }
         Item item = itemRepository.findById(itemNo)
-                .orElseThrow(() -> new EntityNotFoundException("Item with ID " + itemNo + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Item with ID %d not found.", itemNo)));
         itemRepository.delete(item);
         return String.format("Item with ID %d has been successfully deleted.", itemNo);
     }
 
     public void updateStock(Long itemNo, Integer newStockQty) {
-        Item item = itemRepository.findById(itemNo).orElseThrow(() -> new EntityNotFoundException("Item with itemNo " + itemNo + " not found"));
+        Item item = itemRepository.findById(itemNo).orElseThrow(() -> new EntityNotFoundException(String.format("Item with itemNo %d not found", itemNo)));
         if (newStockQty == null || newStockQty < 0) {
             throw new IllegalArgumentException("Stock quantity cannot be negative and cannot be zero");
         }

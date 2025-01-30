@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException e) {
-        return new ResponseEntity<>("Entity Not Found",null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getMessage(),null, HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
